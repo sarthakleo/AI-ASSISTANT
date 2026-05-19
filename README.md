@@ -1,402 +1,309 @@
+# 🤖 AI Business Assistant - Codex Solutions
 
-# CHATBOTX Course Advisor Chatbot
-
-#  Course Advisor Chatbot
-
-A multi-interface chatbot application designed to help prospective students with course inquiries. The chatbot provides information about courses, fees, syllabus, batch schedules, and enrollment processes using the GROQ API with the Llama 3.3 model.
+An intelligent, AI-powered business automation assistant built with **Streamlit** and powered by **Groq's LLaMA 3.3 70B model**. This application helps businesses automate customer inquiries, capture leads, and manage client interactions through a conversational AI interface.
 
 ---
 
-## Features
+## 🌟 Features
 
-- **Multi-Interface Support**: Access the chatbot via Streamlit web UI, terminal CLI, or Flask REST API
-- **Real-time Streaming**: Stream responses from the AI model for better user experience
-- **Session Management**: Maintain conversation history across multiple interactions
-- **Comprehensive Course Information**: Detailed data on offered courses including fees, duration, syllabus, and EMI options
-- **Quick Questions**: Predefined quick questions for common inquiries
-- **Error Handling**: Robust error handling and user-friendly error messages
-
----
-
-## Project Structure
-
-```
-CHATBOTX/
-├── app.py              # Streamlit web UI application
-├── bot.py              # Core chatbot logic with prompt detection
-├── chatbot.py          # Command-line interface (CLI)
-├── server.py           # Flask REST API server with HTML UI
-├── config.py           # Central configuration management
-├── prompts.py          # Multiple system prompts for different contexts
-├── index.html          # Modern web interface (CSS + JavaScript)
-├── requirements.txt    # Python dependencies
-└── README.md          # Project documentation
-```
+### 🎯 Main Features
+- **AI-Powered Chat Interface**: Conversational assistant powered by LLaMA 3.3 70B for intelligent business automation
+- **Lead Capture Form**: Multi-page form to collect customer inquiries and business requirements
+- **Admin Dashboard**: Real-time analytics and lead management with KPIs and filtering
+- **Multi-Page Streamlit Application**: Organized interface with dedicated pages for different functions
+- **Database Persistence**: SQLite database for storing leads and conversation history
+- **Email Notifications**: Automated email notifications for new leads
+- **Quick Questions**: Pre-built question templates for faster interactions
+- **Session Management**: Persistent conversation history with conversation reset capability
 
 ---
 
-## Installation
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Frontend** | Streamlit |
+| **Backend** | Python 3.x |
+| **AI Model** | Groq (LLaMA 3.3 70B) |
+| **Database** | SQLite |
+| **Email** | SMTP (Gmail-compatible) |
+| **HTTP Server** | Flask |
+| **Environment** | Python venv |
+
+**Dependencies:**
+- `streamlit` - Web UI framework
+- `groq` - LLM API client
+- `flask` - REST API server
+- `flask-cors` - CORS support
+- `python-dotenv` - Environment variables
+- `pandas` - Data analysis (for dashboard)
+
+---
+
+## 📦 Installation
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.8+
 - pip (Python package manager)
-- GROQ API key (from [console.groq.com](https://console.groq.com))
+- Git
 
-### Steps
+### Setup Steps
 
-1. **Clone or download the project**:
-   ```bash
-   cd CHATBOTX
-   ```
-
-2. **Create a virtual environment** (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Create a `.env` file** in the project root:
-   ```env
-   GROQ_API_KEY=gsk_your_api_key_here
-   ```
-
----
-
-## Configuration
-
-All configuration is managed through `config.py`. Key settings include:
-
-### API Settings
-- **GROQ_API_KEY**: Your GROQ API key (loaded from `.env`)
-- **MODEL**: `llama-3.3-70b-versatile` (AI model used for responses)
-- **MAX_TOKENS**: `1024` (Maximum tokens per response)
-- **TEMPERATURE**: `0.7` (0 = focused, 1 = creative)
-
-### Application Settings
-- **APP_TITLE**: `Course Advisor` (Application name with emoji)
-- **APP_ICON**: `book` (Emoji icon for web UI)
-- **APP_CAPTION**: Description of the chatbot's purpose
-- **WELCOME_MESSAGE**: Initial greeting message for new conversations
-- **QUICK_QUESTIONS**: List of predefined quick question suggestions
-
----
-
-## Usage
-
-### 1. Streamlit Web Interface
-
-Provides an interactive web-based UI with:
-- Real-time message streaming
-- Chat message history display
-- Quick question buttons in sidebar
-- Conversation reset functionality
-- Responsive design
-
-**Run**:
+1. **Clone the Repository**
 ```bash
-streamlit run app.py
+git clone <repository-url>
+cd AI-ASSITANCE
 ```
 
-**Access**: Opens automatically in browser (typically `http://localhost:8501`)
-
----
-
-### 2. Command-Line Interface (CLI)
-
-Text-based terminal interface with:
-- Interactive command processing
-- Quick question suggestions
-- Demo mode for testing
-- Command support: `quit`, `reset`, `help`, `demo`
-
-**Run**:
+2. **Create Virtual Environment**
 ```bash
-python chatbot.py
+python -m venv .venv
 ```
 
-**Commands**:
-- `quit` - Exit the chatbot
-- `reset` - Start a new conversation
-- `help` - Show available commands
-- `demo` - Run a quick demo conversation
+3. **Activate Virtual Environment**
 
----
+**Windows (PowerShell):**
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
 
-### 3. Flask REST API Server
+**Windows (Command Prompt):**
+```cmd
+.venv\Scripts\activate.bat
+```
 
-HTTP API with built-in Web UI:
-- Session-based conversation management
-- JSON request/response format
-- Health check endpoint
-- **Modern HTML/CSS Web Interface** - Beautiful, responsive UI
-- Quick questions endpoint
-
-**Run**:
+**macOS/Linux:**
 ```bash
-python server.py
+source .venv/bin/activate
 ```
 
-**Access**:
-- **Web UI**: `http://localhost:5000` - Interactive web interface with modern design
-- **API Base**: `http://localhost:5000`
-
----
-
-## Web Interface Features
-
-The modern HTML/CSS web interface (`index.html`) provides an elegant user experience:
-
-### Design Features
-- **Modern Gradient UI**: Purple-to-indigo gradient theme with smooth animations
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **Real-time Chat**: Instant message display with typing animations
-- **Auto-scrolling**: Chat automatically scrolls to latest message
-- **Message Animations**: Smooth slide-in animations for new messages
-
-### Functionality
-- **Session Management**: Auto-generates unique session IDs
-- **Conversation History**: Maintains full chat history in current session
-- **Reset Button**: Clear conversation and start fresh anytime
-- **Send Button**: Easy message sending with visual feedback
-- **Status Badge**: Shows online status in real-time
-- **Typing Indicator**: Animated typing dots while waiting for response
-
-### User Experience
-- **Auto-resizing Textarea**: Input area expands as you type
-- **Enter to Send**: Press Enter to send, Shift+Enter for new line
-- **Helpful Placeholders**: Clear input guidance
-- **Scroll Bar**: Styled scrollbar for better aesthetics
-- **Focus Management**: Auto-focuses input on page load
-- **Error Handling**: User-friendly error messages
-
-### Visual Design
-- Clean, modern aesthetic with professional color scheme
-- Smooth transitions and hover effects
-- Distinct user vs bot message styling
-- Custom scrollbar styling
-- Mobile-optimized layout with breakpoints
-- Accessibility-friendly design
-
----
-
-### GET `/`
-Health check and API information
-- **Response**: JSON with app info and available endpoints
-
-### POST `/chat`
-Send a message and get a response
-- **Request Body**:
-  ```json
-  {
-    "message": "What courses do you offer?",
-    "session_id": "user123"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "user_message": "What courses do you offer?",
-    "bot_reply": "We offer three main courses...",
-    "session_id": "user123"
-  }
-  ```
-
-### GET `/new`
-Start a new conversation
-- **Query Parameters**: `session_id` (optional, defaults to 'default')
-- **Response**: Confirmation with session ID
-
-### GET `/questions`
-Get list of quick questions
-- **Response**:
-  ```json
-  {
-    "questions": [
-      "What courses do you offer?",
-      "What is the AI/ML bootcamp fee?",
-      ...
-    ]
-  }
-  ```
-
----
-
-## Courses Offered
-
-### 1. Python Basics
-- **Fee**: ₹12,000 (EMI: ₹2,000/month × 6)
-- **Duration**: 2 months
-- **Mode**: Fully online (live + recorded)
-- **Certificate**: Yes
-
-### 2. Data Science with Python
-- **Fee**: ₹18,000 (EMI: ₹3,000/month × 6)
-- **Duration**: 3 months
-- **Mode**: Hybrid (online + weekend workshops)
-- **Certificate**: Yes, industry-recognized
-
-### 3. AI/ML Bootcamp
-- **Fee**: ₹25,000 (EMI: ₹4,200/month × 6)
-- **Duration**: 3 months
-- **Mode**: Fully online (Mon-Fri 7-9 PM IST)
-- **Placement**: Yes (resume prep, mock interviews)
-- **Certificate**: Yes, with LinkedIn badge
-
----
-
-## Batch Information
-
-- **Next Batch Start**: 1 July 2026
-- **Batch End**: 31 December 2026
-- **Registration Deadline**: 20 June 2026
-- **Registration Fee**: ₹999 (adjustable toward course fee)
-
----
-
-## Enrollment
-
-- **Website**: chatbotx.com/enroll
-- **Email**: admissions@chatbotx.com
-- **Phone**: 1800-XXX-XXXX (Mon-Sat, 10 AM - 6 PM IST)
-
----
-
-## Core Modules
-
-### `bot.py`
-Core chatbot logic with GROQ API integration and intelligent prompt selection
-- `detect_prompt_type(user_message)`: Analyzes message and selects appropriate prompt
-- `chat(history, user_message)`: Non-streaming chat response with smart prompt selection
-- `stream_chat(history, user_message)`: Streaming chat responses with smart prompt selection
-- `new_conversation()`: Initialize empty conversation history
-
-### `config.py`
-Centralized configuration management
-- API credentials and model settings
-- Application display settings
-- Course information and quick questions
-
-### `prompts.py`
-Multiple system prompts for different contexts
-- **SYSTEM_PROMPT**: Course advisor for general inquiries
-- **TECHNICAL_SUPPORT_PROMPT**: Technical troubleshooting and platform issues
-- **FAQ_PROMPT**: Frequently asked questions with quick answers
-- **PLACEMENT_ASSISTANT_PROMPT**: Career guidance and job placement support
-- **CAREER_ADVISOR_PROMPT**: Career path recommendations based on goals
-- **Smart Prompt Detection**: Automatically selects appropriate prompt based on user query
-
-### `app.py`
-Streamlit web interface
-- Page configuration and session state management
-- Message rendering and history display
-- Chat input handling with real-time streaming
-- Sidebar with quick questions and clear conversation button
-
-### `chatbot.py`
-Command-line interface
-- Terminal-based chat interaction
-- Command processing (quit, reset, help, demo)
-- Help and demo functionality
-
-### `server.py`
-Flask REST API server
-- HTTP endpoints for chatbot access
-- Session-based conversation management
-- JSON request/response handling
-- Error handling and validation
-
----
-
-## Dependencies
-
-- **groq**: GROQ API client for LLM access
-- **python-dotenv**: Environment variable management
-- **streamlit**: Web UI framework
-- **flask**: REST API framework
-
-See `requirements.txt` for specific versions.
-
----
-
-## Troubleshooting
-
-### GROQ_API_KEY Error
-- Ensure `.env` file exists in project root
-- Verify API key is correct from [console.groq.com](https://console.groq.com)
-- Check that `.env` is not in `.gitignore` (for local use only)
-
-### Port Already in Use
-- **Streamlit (8501)**: Run `streamlit run app.py --server.port 8502`
-- **Flask (5000)**: Modify `port=5000` in `server.py`
-
-### API Rate Limiting
-- GROQ API has rate limits; monitor response times
-- Adjust `MAX_TOKENS` in `config.py` if needed
-
-### Empty Responses
-- Verify `SYSTEM_PROMPT` in `prompts.py` is not empty
-- Check GROQ API status and quota
-
----
-
-## Architecture
-
-The application follows a modular architecture:
-
-```
-User Input
-    ↓
-Interface Layer (app.py / chatbot.py / server.py)
-    ↓
-Bot Logic (bot.py)
-    ↓
-GROQ API
-    ↓
-Llama 3.3 Model
-    ↓
-Response
+4. **Install Dependencies**
+```bash
+pip install -r requirements.txt
 ```
 
-**Conversation Flow**:
-1. User sends message
-2. Message appended to history
-3. History + system prompt sent to GROQ API
-4. AI generates response using Llama 3.3 model
-5. Response streamed or returned to user
-6. Response appended to history for context
+5. **Configure Environment Variables**
+
+Create a `.env` file in the project root:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+EMAIL_SENDER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+EMAIL_RECEIVER=recipient@example.com
+```
+
+**Get GROQ API Key:**
+- Visit [console.groq.com](https://console.groq.com)
+- Create an account and generate an API key
+
+**Setup Gmail SMTP:**
+- Enable 2-factor authentication on Gmail
+- Generate an [App Password](https://myaccount.google.com/apppasswords)
+- Use the app password in `.env`
 
 ---
 
-## Future Enhancements
+## 🚀 Usage
 
-- Database integration for conversation persistence
-- User authentication and profiles
-- Advanced analytics and feedback collection
-- Multi-language support
-- Document upload for course details
-- Integration with enrollment system
-- Admin dashboard
+### Run the Application
+
+```bash
+python -m streamlit run app.py
+```
+
+The application will be available at:
+- **Local**: http://localhost:8501
+- **Network**: http://192.168.0.x:8501
+
+### Features Overview
+
+#### 1. **Chat Page** (Main)
+- Chat with the AI Business Assistant
+- Quick question buttons for instant responses
+- Clear conversation history option
+- Sidebar navigation
+
+#### 2. **Lead Form Page** (📝 Get a Free Consultation)
+- Collect customer information
+- Service selection dropdown
+- Budget estimation
+- Message/requirements input
+- Automatic lead storage and email notification
+
+#### 3. **Admin Dashboard** (📊 Admin Dashboard)
+- View all leads with details
+- KPI metrics:
+  - Total leads count
+  - Unique companies
+  - Today's leads
+  - High-budget leads
+  - Average leads per day
+- Lead filtering and analysis
+- Export capabilities
 
 ---
 
-## License
+## 📁 Project Structure
 
-Propriatary - CHATBOTX 2026
+```
+AI-ASSITANCE/
+│
+├── app.py                      # Main Streamlit application
+├── bot.py                      # Chatbot logic & AI integration
+├── chatbot.py                  # CLI chatbot interface
+├── config.py                   # Configuration & constants
+├── database.py                 # SQLite database operations
+├── email_utils.py              # Email sending functionality
+├── prompts.py                  # AI prompt templates
+├── server.py                   # Flask API server
+│
+├── pages/                      # Streamlit multi-page apps
+│   ├── 1_Lead_Form.py          # Lead capture form
+│   └── 2_Admin_Dashboard.py    # Admin analytics dashboard
+│
+├── requirements.txt            # Python dependencies
+├── leads.db                    # SQLite database (auto-generated)
+├── .env                        # Environment variables (create manually)
+└── README.md                   # This file
+```
 
 ---
 
-## Support
+## ⚙️ Configuration
 
-For technical support or inquiries:
-- Email: admissions@chatbotx.com
-- Phone: 1800-XXX-XXXX (Mon-Sat, 10 AM - 6 PM IST)
-- Website: chatbotx.com
+### Customize Services & Pricing
+
+Edit `config.py` to modify:
+
+```python
+SERVICES = {
+    'AI Chatbot Development': {'price': '₹ 49,999–1,49,999', 'weeks': '2–6'},
+    'Business Process Automation': {'price': '₹ 29,999–99,999', 'weeks': '1–4'},
+    # Add more services...
+}
+```
+
+### Customize Business Info
+
+Update company details in `config.py`:
+
+```python
+BUSINESS_INFO = {
+    'company_name': 'Codex Solutions',
+    'tagline': 'Automate. Innovate. Accelerate.',
+    'website': 'codex.com',
+    'email': 'hello@codex.com',
+    'phone': '1800-COD-ENIX',
+}
+```
+
+### Modify AI Behavior
+
+Adjust LLM parameters in `config.py`:
+
+```python
+MODEL = 'llama-3.3-70b-versatile'
+MAX_TOKENS = 1024
+TEMPERATURE = 0.7  # 0=deterministic, 1=creative
+```
 
 ---
 
-*  CHATBOTX 2026**
+## 📊 Database Schema
+
+### Leads Table
+```sql
+CREATE TABLE leads (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    company TEXT,
+    service TEXT,
+    budget TEXT,
+    message TEXT,
+    timestamp TEXT
+)
+```
+
+---
+
+## 🔌 API Endpoints
+
+The Flask server (`server.py`) provides REST APIs:
+
+- `POST /api/chat` - Send message to chatbot
+- `GET /api/leads` - Retrieve all leads
+- `POST /api/leads` - Create new lead
+- `GET /api/health` - Health check
+
+---
+
+## 🐛 Troubleshooting
+
+### Issue: `streamlit not recognized`
+**Solution:**
+```bash
+python -m streamlit run app.py
+```
+
+### Issue: `GROQ_API_KEY not found`
+**Solution:**
+- Create `.env` file with proper API key
+- Verify file is in project root directory
+- Restart the application
+
+### Issue: Email not sending
+**Solution:**
+- Verify Gmail 2FA is enabled
+- Check if App Password is generated and correct
+- Verify `EMAIL_SENDER` and `EMAIL_PASSWORD` in `.env`
+
+### Issue: Database locked error
+**Solution:**
+```bash
+rm leads.db  # Delete corrupted database
+# Restart app - database will regenerate
+```
+
+---
+
+## 👥 Team
+
+**Codex Solutions**
+- 🌐 Website: [codex.com](https://codex.com)
+- 📧 Email: [hello@codex.com](mailto:hello@codex.com)
+- ☎️ Phone: 1800-COD-ENIX
+- ⏰ Support Hours: Mon–Sat, 9 AM – 7 PM IST
+
+---
+
+## 📝 License
+
+This project is proprietary software by Codex Solutions. All rights reserved.
+
+---
+
+## 🚀 Future Enhancements
+
+- [ ] User authentication & admin login
+- [ ] Advanced lead scoring
+- [ ] Integration with CRM systems
+- [ ] Multiple language support
+- [ ] Conversation analytics
+- [ ] Custom AI model fine-tuning
+- [ ] Webhook integrations
+- [ ] Mobile app version
+
+---
+
+## 📞 Support
+
+For issues, questions, or feature requests, contact:
+- **Email**: hello@codex.com
+- **Phone**: 1800-COD-ENIX
+- **Hours**: Mon–Sat, 9 AM – 7 PM IST
+
+---
+
+**Tagline:** *Automate. Innovate. Accelerate.* ⚡
