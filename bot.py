@@ -1,60 +1,67 @@
 from groq import Groq
 from config import GROQ_API_KEY, MODEL, MAX_TOKENS, TEMPERATURE
 from prompts import (
-    SYSTEM_PROMPT, TECHNICAL_SUPPORT_PROMPT, PLACEMENT_ASSISTANT_PROMPT,
-    FAQ_PROMPT, CAREER_ADVISOR_PROMPT
+    SYSTEM_PROMPT, SALES_PROMPT, TECHNICAL_SUPPORT_PROMPT,
+    LEAD_PROMPT, FAQ_PROMPT
 )
 
 client = Groq(api_key=GROQ_API_KEY)
 
+PROMPT_MAP = {
+    'general': SYSTEM_PROMPT,
+    'sales': SALES_PROMPT,
+    'technical': TECHNICAL_SUPPORT_PROMPT,
+    'lead': LEAD_PROMPT,
+    'faq': FAQ_PROMPT,
+}
+
 def detect_prompt_type(user_message: str) -> str:
-    user_lower = user_message.lower()
+    """Detect which prompt to use based on user message keywords."""
+    msg = user_message.lower()
     
-    technical_keywords = [
-        'video', 'login', 'access', 'error', 'bug', 'crash', 'broken', 'not working',
-        'can\'t', 'cannot', 'issue', 'problem', 'technical', 'server', 'payment failed',
-        'download', 'certificate', 'platform', 'dashboard'
+    # Sales / Pricing keywords
+    sales_keywords = [
+        'price', 'cost', 'fee', 'how much', 'pricing', 'quote',
+        'package', 'plan', 'buy', 'purchase', 'hire', 'budget',
+        'affordable', 'cheap', 'expensive', 'rate', 'charge'
     ]
     
-    placement_keywords = [
-        'job', 'placement', 'interview', 'resume', 'career', 'interview prep',
-        'mock interview', 'salary', 'hiring', 'recruiter', 'linkedin'
+    # Technical support keywords
+    tech_keywords = [
+        'error', 'bug', 'not working', 'broken', 'integrate', 'api',
+        'how to', 'technical', 'setup', 'configure', 'deploy',
+        'webhook', 'database', 'install', 'implement'
     ]
     
-    career_keywords = [
-        'career path', 'which course', 'should i take', 'learning path', 'track',
-        'data analyst', 'ml engineer', 'python developer', 'ai specialist',
-        'best course', 'suitable', 'recommend', 'prerequisites', 'experience needed'
+    # Lead / contact / interested keywords
+    lead_keywords = [
+        'interested', 'contact', 'reach', 'call me', 'discuss',
+        'demo', 'meeting', 'consult', 'get started', 'sign up',
+        'register', 'inquiry', 'proposal', 'project'
     ]
     
+    # FAQ keywords
     faq_keywords = [
-        'refund', 'self-paced', 'instructor-led', 'time commitment', 'when',
-        'batch', 'payment method', 'access after', 'live class', 'certificate value',
-        'multiple courses', 'duration', 'how long', 'hours per week'
+        'how long', 'timeline', 'nda', 'support', 'after delivery',
+        'startup', 'refund', 'guarantee', 'revision', 'contract'
     ]
     
-    for keyword in technical_keywords:
-        if keyword in user_lower:
-            return TECHNICAL_SUPPORT_PROMPT
-    
-    for keyword in placement_keywords:
-        if keyword in user_lower:
-            return PLACEMENT_ASSISTANT_PROMPT
-    
-    for keyword in career_keywords:
-        if keyword in user_lower:
-            return CAREER_ADVISOR_PROMPT
-    
-    for keyword in faq_keywords:
-        if keyword in user_lower:
-            return FAQ_PROMPT
-    
-    return SYSTEM_PROMPT
+    if any(k in msg for k in sales_keywords):
+        return 'sales'
+    elif any(k in msg for k in tech_keywords):
+        return 'technical'
+    elif any(k in msg for k in lead_keywords):
+        return 'lead'
+    elif any(k in msg for k in faq_keywords):
+        return 'faq'
+    else:
+        return 'general'
 
 def chat(history, user_message):
     history.append({"role": "user", "content": user_message})
-    selected_prompt = detect_prompt_type(user_message)
-    messages = [{"role": "system", "content": selected_prompt}] + history
+    prompt_type = detect_prompt_type(user_message)
+    system_prompt = PROMPT_MAP.get(prompt_type, SYSTEM_PROMPT)
+    messages = [{"role": "system", "content": system_prompt}] + history
     response = client.chat.completions.create(
         model=MODEL,
         messages=messages,
@@ -67,8 +74,9 @@ def chat(history, user_message):
 
 def stream_chat(history, user_message):
     history.append({"role": "user", "content": user_message})
-    selected_prompt = detect_prompt_type(user_message)
-    messages = [{"role": "system", "content": selected_prompt}] + history
+    prompt_type = detect_prompt_type(user_message)
+    system_prompt = PROMPT_MAP.get(prompt_type, SYSTEM_PROMPT)
+    messages = [{"role": "system", "content": system_prompt}] + history
     stream = client.chat.completions.create(
         model=MODEL,
         messages=messages,

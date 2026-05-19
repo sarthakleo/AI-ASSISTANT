@@ -1,69 +1,73 @@
+# app.py — FULL REWRITE
 import streamlit as st
 from bot import stream_chat, new_conversation
 from config import (
     APP_TITLE, APP_ICON, APP_CAPTION,
     WELCOME_MESSAGE, QUICK_QUESTIONS,
 )
+from database import init_db
 
+# Initialize SQLite database on every app start
+init_db()
+
+# Page config
 st.set_page_config(
-    page_title=APP_TITLE,
-    page_icon=":" + APP_ICON + ":",
-    layout="centered",
+    page_title='Business Assistant | Codex',
+    page_icon=':robot_face:',
+    layout='centered'
 )
 
-if "messages" not in st.session_state:
+# Session state init
+if 'messages' not in st.session_state:
     st.session_state.messages = new_conversation()
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": WELCOME_MESSAGE,
-    })
+if 'chat_started' not in st.session_state:
+    st.session_state.chat_started = False
 
-st.title(APP_TITLE)
-st.caption(APP_CAPTION)
-
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
-
+# Sidebar
 with st.sidebar:
-    st.subheader("Quick questions")
+    st.title(' Business Assistant')
+    st.caption('Codex Solutions · AI & Automation')
+    st.divider()
+    st.subheader('Quick Questions')
     for question in QUICK_QUESTIONS:
         if st.button(question, use_container_width=True):
-            st.session_state.pending_input = question
-    
+            st.session_state['quick_input'] = question
     st.divider()
-    if st.button("Clear conversation", use_container_width=True):
+    st.info(' Use the sidebar pages to register interest or view the admin panel.')
+    if st.button(' Clear Conversation', use_container_width=True):
         st.session_state.messages = new_conversation()
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": WELCOME_MESSAGE,
-        })
+        st.session_state.chat_started = False
         st.rerun()
-    
-    st.caption("Powered by Claude · Codenixia 2026")
 
-def handle_message(user_msg: str) -> None:
-    # Show user bubble
-    with st.chat_message("user"):
-        st.markdown(user_msg)
-    
-    with st.chat_message("assistant"):
-        placeholder = st.empty()
-        full_reply = ""
-        for chunk in stream_chat(st.session_state.messages, user_msg):
-            full_reply += chunk
-            placeholder.markdown(full_reply + "▌")
-        placeholder.markdown(full_reply)
-    
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": full_reply,
-    })
+# Main chat area
+st.title(' AI Business Assistant')
+st.caption('Powered by · Codex Solutions')
+st.divider()
 
+# Show welcome if no messages yet
+if not st.session_state.chat_started:
+    with st.chat_message('assistant'):
+        st.markdown(WELCOME_MESSAGE)
 
-if "pending_input" in st.session_state:
-    user_msg = st.session_state.pop("pending_input")
-    handle_message(user_msg)
+# Show existing chat history
+for message in st.session_state.messages:
+    with st.chat_message(message['role']):
+        st.markdown(message['content'])
 
-if prompt := st.chat_input("Ask about our courses..."):
-    handle_message(prompt)
+# Handle quick question button
+if 'quick_input' in st.session_state:
+    user_input = st.session_state.pop('quick_input')
+else:
+    user_input = None
+
+# Chat input
+if prompt := (st.chat_input('Ask about our services, pricing, automation...') or user_input):
+    st.session_state.chat_started = True
+    st.session_state.messages.append({'role': 'user', 'content': prompt})
+    with st.chat_message('user'):
+        st.markdown(prompt)
+    with st.chat_message('assistant'):
+        response = st.write_stream(
+            stream_chat(st.session_state.messages, prompt)
+        )
+        st.session_state.messages.append({'role': 'assistant', 'content': response})
