@@ -49,18 +49,14 @@ An intelligent, AI-powered business automation assistant built with **Streamlit*
 
 ### Setup Steps
 
-1. **Clone the Repository**
-```bash
-git clone <repository-url>
-cd AI-ASSITANCE
-```
 
-2. **Create Virtual Environment**
+
+1. **Create Virtual Environment**
 ```bash
 python -m venv .venv
 ```
 
-3. **Activate Virtual Environment**
+2. **Activate Virtual Environment**
 
 **Windows (PowerShell):**
 ```powershell
@@ -77,12 +73,12 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-4. **Install Dependencies**
+3. **Install Dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-5. **Configure Environment Variables**
+4. **Configure Environment Variables**
 
 Create a `.env` file in the project root:
 ```env
